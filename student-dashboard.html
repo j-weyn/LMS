@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Opening Student Dashboard</title>
+</head>
+<body>
+  <p>Opening the PHP dashboard. <a href="http://localhost/educ%20website/student-dashboard.php">Continue to the dashboard</a>.</p>
+  <script>
+    const base = window.location.protocol === "file:"
+      ? "http://localhost/educ%20website/student-dashboard.php"
+      : "student-dashboard.php";
+    window.location.replace(base + window.location.search + window.location.hash);
+  </script>
+</body>
+</html>

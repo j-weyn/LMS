@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Opening EARIST Learn</title>
+</head>
+<body>
+  <p>Opening EARIST Learn. <a href="http://localhost/educ%20website/home.php">Continue to the course catalog</a>.</p>
+  <script>
+    const base = window.location.protocol === "file:"
+      ? "http://localhost/educ%20website/home.php"
+      : "home.php";
+    window.location.replace(base + window.location.search + window.location.hash);
+  </script>
+</body>
+</html>

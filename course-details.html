@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Opening Course Details</title>
+</head>
+<body>
+  <p>Opening the PHP course page. <a href="http://localhost/educ%20website/course-details.php">Continue to course details</a>.</p>
+  <script>
+    const base = window.location.protocol === "file:"
+      ? "http://localhost/educ%20website/course-details.php"
+      : "course-details.php";
+    window.location.replace(base + window.location.search + window.location.hash);
+  </script>
+</body>
+</html>
