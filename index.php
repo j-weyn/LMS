@@ -38,6 +38,9 @@ $message = flash_message();
         <a href="my-courses.php">My Courses (<?= count($enrolledIds) ?>)</a>
         <a href="index.php#learningPath">Learning Path</a>
         <?php if ($user): ?>
+          <?php if ($user['role'] === 'admin'): ?>
+            <a href="admin.php" class="btn" style="min-height: 30px; padding: 5px 15px; background: var(--maroon); color: var(--yellow); border: 1px solid var(--yellow);">Admin Panel</a>
+          <?php endif; ?>
           <span style="font-size: 12px; color: var(--muted);">Hi, <?= e($user['full_name']) ?></span>
           <a href="logout.php" style="color: var(--red);">Logout</a>
         <?php else: ?>

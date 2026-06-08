@@ -62,6 +62,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 $enrollment = enrollment_for_course($db, $courseId);
 $completed = completed_lessons($db, $enrollmentId);
 $progress = (int) ($enrollment['progress'] ?? 0);
+$quizAttempt = get_quiz_attempt($db, get_user_id(), $courseId);
 $message = flash_message();
 ?>
 <!DOCTYPE html>
@@ -130,6 +131,16 @@ $message = flash_message();
                     <small style="color: #666;"><?= e($text) ?></small>
                     <?php if ($key === 'reading-notes'): ?>
                         <br><a href="module-view.php?course_id=<?= $courseId ?>" target="_blank" style="font-size: 0.8rem; color: #007bff;">Open & Download Module</a>
+                    <?php endif; ?>
+                    <?php if ($key === 'short-quiz'): ?>
+                        <br>
+                        <?php if (!$quizAttempt): ?>
+                            <a href="quiz.php?course_id=<?= $courseId ?>" style="font-size: 0.8rem; color: #007bff;">Take 30-Item Quiz</a>
+                        <?php elseif ($quizAttempt['status'] === 'pending'): ?>
+                            <span style="font-size: 0.8rem; color: #f39c12;">Quiz Submitted (Awaiting Faculty Review)</span>
+                        <?php else: ?>
+                            <span style="font-size: 0.8rem; color: #27ae60;">Quiz Result: <strong><?= $quizAttempt['score'] ?>/<?= $quizAttempt['total_items'] ?></strong></span>
+                        <?php endif; ?>
                     <?php endif; ?>
                 </span>
               </label>

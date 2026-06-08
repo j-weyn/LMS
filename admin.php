@@ -20,10 +20,17 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         delete_course($db, (int)$_POST['delete_id']);
         redirect_to('admin.php?message=Course deleted');
     }
+    if (isset($_POST['release_quiz_id'])) {
+        $stmt = $db->prepare("UPDATE quiz_attempts SET status = 'released' WHERE id = ?");
+        $stmt->bind_param('i', $_POST['release_quiz_id']);
+        $stmt->execute();
+        redirect_to('admin.php?message=Result released to student');
+    }
 }
 
 $courses = courses($db);
 $stats = get_admin_stats($db);
+$quizAttempts = get_all_quiz_attempts($db);
 $editCourse = ($action === 'edit' && isset($_GET['id'])) ? course_by_id($db, (int)$_GET['id']) : null;
 ?>
 <!DOCTYPE html>
@@ -149,6 +156,43 @@ $editCourse = ($action === 'edit' && isset($_GET['id'])) ? course_by_id($db, (in
                     <?php endif; ?>
                 </form>
             </aside>
+
+            <section class="panel" style="grid-column: span 2; margin-top: 20px;">
+                <h2>Student Quiz Submissions</h2>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Student</th>
+                            <th>Course</th>
+                            <th>Score</th>
+                            <th>Date</th>
+                            <th>Status</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <?php foreach ($quizAttempts as $qa): ?>
+                        <tr>
+                            <td><?= e($qa['full_name']) ?></td>
+                            <td><?= e($qa['course_title']) ?></td>
+                            <td><?= $qa['score'] ?> / <?= $qa['total_items'] ?></td>
+                            <td><?= date('M j, Y', strtotime($qa['submitted_at'])) ?></td>
+                            <td><span class="badge" style="background: <?= $qa['status'] === 'released' ? 'var(--green)' : 'var(--orange)' ?>; color: white; padding: 2px 8px; border-radius: 4px; font-size: 0.8rem;"><?= ucfirst($qa['status']) ?></span></td>
+                            <td>
+                                <?php if ($qa['status'] === 'pending'): ?>
+                                    <form method="POST" style="display:inline;">
+                                        <input type="hidden" name="release_quiz_id" value="<?= $qa['id'] ?>">
+                                        <button type="submit" class="btn primary" style="padding: 4px 10px; font-size: 0.8rem;">Release Result</button>
+                                    </form>
+                                <?php else: ?>
+                                    -
+                                <?php endif; ?>
+                            </td>
+                        </tr>
+                        <?php endforeach; ?>
+                    </tbody>
+                </table>
+            </section>
         </div>
     </main>
 </body>
